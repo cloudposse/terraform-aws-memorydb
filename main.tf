@@ -77,9 +77,9 @@ resource "aws_memorydb_user" "admin" {
 resource "aws_ssm_parameter" "admin_password" {
   count = module.this.enabled ? 1 : 0
 
-  name  = var.ssm_parameter_name
-  type  = "SecureString"
-  value = local.user_password
+  name   = var.ssm_parameter_name
+  type   = "SecureString"
+  value  = local.user_password
   key_id = var.ssm_kms_key_id
 
   tags = module.this.tags
