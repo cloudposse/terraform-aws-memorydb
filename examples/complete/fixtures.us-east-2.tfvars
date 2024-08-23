@@ -6,7 +6,9 @@ environment = "ue2"
 
 stage = "test"
 
-name = "example"
+name = "memorydb"
 
-example_input = "Hello, world!"
+availability_zones = [ "us-east-2a", "us-east-2b" ]
+
+vpc_cidr_block = "172.16.0.0/16"
 

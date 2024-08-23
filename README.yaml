@@ -1,19 +1,10 @@
-#         DELETE ME
-#
-# The above is the README configuration for the Example module itself.
-# Delete from here to the top of file and fill in the template below
-########################################################################################################################
-########################################################################################################################
-########################################################################################################################
-
-
 #
 # This is the canonical configuration for the `README.md`
 # Run `make readme` to rebuild the `README.md`
 #
 
 # Name of this project
-name: terraform-example-module
+name: terraform-aws-memorydb
 
 # Logo for this project
 #logo: docs/logo.png
@@ -25,10 +16,10 @@ license: "APACHE2"
 copyrights:
   - name: "Cloud Posse, LLC"
     url: "https://cloudposse.com"
-    year: "2021"
+    year: "2024"
 
 # Canonical GitHub repo
-github_repo: cloudposse/terraform-example-module
+github_repo: cloudposse/terraform-aws-memorydb
 
 # Badges to display
 badges:
@@ -47,71 +38,93 @@ badges:
 
 # List any related terraform modules that this module may be used with or that this module depends on.
 related:
-  - name: "terraform-null-label"
-    description: "Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention."
-    url: "https://github.com/cloudposse/terraform-null-label"
+  - name: terraform-null-label
+    description: Terraform module designed to generate consistent names and tags for resources. Use terraform-null-label to implement a strict naming convention.
+    url: https://github.com/cloudposse/terraform-null-label
+  - name: terraform-aws-security-group
+    description: Terraform module to create an AWS Security Group along with a set of Security Group Rules.
+    url: https://github.com/cloudposse/terraform-aws-security-group
 
 # List any resources helpful for someone to get started. For example, link to the hashicorp documentation or AWS documentation.
 references:
-  - name: "Cloud Posse Documentation"
-    url: "https://docs.cloudposse.com"
-    description: "The Cloud Posse Developer Hub (documentation)"
-  - name: "Terraform Standard Module Structure"
-    description: "HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories."
-    url: "https://www.terraform.io/docs/language/modules/develop/structure.html"
-  - name: "Terraform Module Requirements"
-    description: "HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy."
-    url: "https://www.terraform.io/docs/registry/modules/publish.html#requirements"
-  - name: "Terraform Version Pinning"
-    description: "The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration"
-    url: "https://www.terraform.io/docs/language/settings/index.html#specifying-a-required-terraform-version"
+  - name: Cloud Posse Documentation
+    url: https://docs.cloudposse.com
+    description: The Cloud Posse Developer Hub (documentation)
+  - name: AWS MemoryDB resources
+    url: https://aws.amazon.com/memorydb/resources
+    description: AWS MemoryDB resources
+  - name: Terraform Standard Module Structure
+    description: HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories.
+    url: https://www.terraform.io/docs/language/modules/develop/structure.html
+  - name: Terraform Module Requirements
+    description: HashiCorp's guidance on all the requirements for publishing a module. Meeting the requirements for publishing a module is extremely easy.
+    url: https://www.terraform.io/docs/registry/modules/publish.html#requirements
+  - name: Terraform Version Pinning
+    description: The required_version setting can be used to constrain which versions of the Terraform CLI can be used with your configuration
+    url: https://www.terraform.io/docs/language/settings/index.html#specifying-a-required-terraform-version
 
 # Short description of this project
 description: |-
-  Short
-  description
+  This module allows an engineer to configure the admin user, subnet group, and parameter group for an AWS MemoryDB cluster.
 
 # Introduction to the project
 introduction: |-
-  This is an introduction.
+  AWS MemoryDB is a fully managed, Redis-compatible, in-memory database service that delivers ultra-fast performance and Multi-AZ durability for modern applications built using microservices architectures.
 
 # How to use this module. Should be an easy example to copy and paste.
 usage: |-
-  For a complete example, see [examples/complete](examples/complete).
+  For a complete example, see [the examples/complete directory](examples/complete).
 
-  For automated tests of the complete example using [bats](https://github.com/bats-core/bats-core) and [Terratest](https://github.com/gruntwork-io/terratest)
-  (which tests and deploys the example on AWS), see [test](test).
+  For automated tests of the complete example using [Terratest](https://github.com/gruntwork-io/terratest)
+  (which tests and deploys the example on AWS), see [the test directory](test).
 
   ```hcl
-  # Create a standard label resource. See [null-label](https://github.com/cloudposse/terraform-null-label/#terraform-null-label--)
-  module "label" {
-    source  = "cloudposse/label/null"
-    # Cloud Posse recommends pinning every module to a specific version, though usually you want to use the current one
-    # version = "x.x.x"
-
-    namespace = "eg"
-    name      = "example"
+  provider "aws" {
+    region = "us-west-2"
   }
 
-  module "example" {
-    source  = "cloudposse/*****/aws"
+  # Create a standard label resource. See [null-label](https://github.com/cloudposse/terraform-null-label/#terraform-null-label--)
+  module "label" {
+    source = "cloudposse/label/null"
     # Cloud Posse recommends pinning every module to a specific version
     # version = "x.x.x"
 
-    example = "Hello world!"
+    namespace   = "eg"
+    environment = "usw2"
+    stage       = "sandbox"
+    name        = "memorydb"
+  }
 
-    context = module.label.this
+  module "example" {
+    source = "cloudposse/memorydb/aws"
+    # Cloud Posse recommends pinning every module to a specific version
+    # version = "x.x.x"
+
+    ssm_parameter_name = "${module.label.id}/admin_password"
+
+    context = module.label.context
   }
   ```
 
 # Example usage
 examples: |-
   Here is an example of using this module:
-  - [`examples/complete`](https://github.com/cloudposse/terraform-example-module/) - complete example of using this module
+  - [`examples/complete`](examples/complete) - complete example of using this module
 
 # How to get started quickly
 quickstart: |-
-  Here's how to get started...
+  This module relies on two other AWS services:
+  - AWS VPC (Virtual Private Cloud)
+  - AWS SSM (Systems Manager)
+
+  Make sure you either have a default VPC already made or have subnet IDs for any other VPC.
+  At a minimum specify these variables:
+  - `ssm_parameter_name` - the name of the SSM parameter that stores the admin password for the MemoryDB cluster
+  - `subnet_ids` - required if not using a default VPC, this is a list of subnet IDs where the MemoryDB cluster will be deployed
+  - `security_group_ids` - required if not using default security groups, this is a list of security group IDs to attach to the MemoryDB cluster
+  
+  See our [VPC module](https://github.com/cloudposse/terraform-aws-vpc) for creating a VPC.
+  See our [Security Group module](https://github.com/cloudposse/terraform-aws-security-group) for creating security groups.
 
 # Other files to include in this README from the project folder
 include:
