@@ -90,7 +90,7 @@ variable "snapshot_arns" {
 }
 
 variable "admin_username" {
-  description = "The username for the MemoryDB user"
+  description = "The username for the MemoryDB admin"
   type        = string
   default     = "admin"
   nullable    = false
@@ -112,9 +112,9 @@ variable "ssm_kms_key_id" {
 }
 
 variable "ssm_parameter_name" {
-  description = "The name of the SSM parameter to store the password in"
+  description = "The name of the SSM parameter to store the password in. If not specified, the password will not be stored."
   type        = string
-  default = ""
+  default     = ""
   nullable    = false
 }
 
