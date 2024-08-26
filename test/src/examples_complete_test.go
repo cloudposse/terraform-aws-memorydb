@@ -9,7 +9,6 @@ import (
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	testStructure "github.com/gruntwork-io/terratest/modules/test-structure"
 	"github.com/stretchr/testify/assert"
-	"google.golang.org/genproto/googleapis/firestore/admin/v1"
 )
 
 func cleanup(t *testing.T, terraformOptions *terraform.Options, tempTestFolder string) {
