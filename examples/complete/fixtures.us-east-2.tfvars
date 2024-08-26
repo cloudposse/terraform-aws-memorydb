@@ -44,7 +44,6 @@ ssm_parameter_name = "/memorydb/admin_password"
 
 parameter_group_family = "redis6.x"
 
-parameters = [{
-  name  = "maxmemory-policy"
-  value = "allkeys-lfu"
-}]
+parameters = {
+  "activedefrag" = "yes"
+}

@@ -126,13 +126,10 @@ variable "parameter_group_family" {
 }
 
 variable "parameters" {
-  description = "List of parameters to apply to the parameter group"
-  type = list(object({
-    name  = string
-    value = string
-  }))
-  default  = []
-  nullable = false
+  description = "Key-value mapping of parameters to apply to the parameter group"
+  type        = map(string)
+  default     = {}
+  nullable    = false
 }
 
 variable "sns_topic_arn" {
