@@ -48,7 +48,7 @@ variable "subnet_ids" {
 }
 
 variable "security_group_ids" {
-  description = "List of security group IDs for the MemoryDB cluster"
+  description = "List of security group IDs to associate with the MemoryDB cluster"
   type        = list(string)
   default     = []
   nullable    = false
