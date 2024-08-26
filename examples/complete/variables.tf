@@ -46,12 +46,14 @@ variable "auto_minor_version_upgrade" {
   default     = true
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "subnet_ids" {
   description = "List of subnet IDs for the MemoryDB cluster. Leave empty to use the default VPC subnets."
   type        = list(string)
   default     = []
 }
 
+# tflint-ignore: terraform_unused_declarations
 variable "security_group_ids" {
   description = "List of security group IDs for the MemoryDB cluster"
   type        = list(string)

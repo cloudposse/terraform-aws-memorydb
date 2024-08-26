@@ -41,5 +41,8 @@ module "example" {
 
   ssm_parameter_name = "/memorydb/admin_password"
 
+  parameter_group_family = var.parameter_group_family
+  parameters             = var.parameters
+
   context = module.this.context
 }
