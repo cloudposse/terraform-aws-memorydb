@@ -39,7 +39,7 @@ module "example" {
   admin_password = var.admin_password
   admin_username = var.admin_username
 
-  ssm_parameter_name = "/memorydb/admin_password"
+  ssm_parameter_name = var.ssm_parameter_name
 
   parameter_group_family = var.parameter_group_family
   parameters             = var.parameters
