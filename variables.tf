@@ -64,22 +64,22 @@ variable "port" {
 variable "maintenance_window" {
   description = "The weekly time range during which system maintenance can occur"
   type        = string
-  default     = "sun:05:00-sun:09:00"
-  nullable    = false
+  default     = null
+  nullable    = true
 }
 
 variable "snapshot_window" {
   description = "The daily time range during which MemoryDB begins taking daily snapshots"
   type        = string
-  default     = "05:00-09:00"
+  default     = null
   nullable    = false
 }
 
 variable "snapshot_retention_limit" {
   description = "The number of days for which MemoryDB retains automatic snapshots before deleting them"
   type        = number
-  default     = 5
-  nullable    = false
+  default     = null
+  nullable    = true
 }
 
 variable "snapshot_arns" {
