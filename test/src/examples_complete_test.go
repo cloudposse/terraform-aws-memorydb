@@ -38,7 +38,7 @@ func TestExamplesComplete(t *testing.T) {
       "attributes": attributes,
       // avoid opentofu and terraform colliding on the same username during parallel tests
       "admin_username": "admin-" + randID,
-      "ssm_parameter_name": "memorydb/eg-ue2-test-memorydb-" + randID,
+      "ssm_parameter_name": "/memorydb/eg-ue2-test-memorydb-" + randID,
     },
   }
 
