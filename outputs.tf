@@ -39,7 +39,7 @@ output "subnet_group_arn" {
 }
 
 output "shards" {
-  description = "The number of shards in the MemoryDB cluster"
+  description = "The shard details for the MemoryDB cluster"
   value       = one(aws_memorydb_cluster.default[*].shards)
 }
 
