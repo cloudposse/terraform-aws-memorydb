@@ -9,7 +9,7 @@ resource "aws_memorydb_cluster" "default" {
   count = module.this.enabled ? 1 : 0
 
   name                   = module.this.id
-  acl_name               = join("", aws_memorydb_acl.default.*.id)
+  acl_name               = join("", aws_memorydb_acl.default[*].id)
   node_type              = var.node_type
   num_shards             = var.num_shards
   num_replicas_per_shard = var.num_replicas_per_shard
@@ -17,8 +17,8 @@ resource "aws_memorydb_cluster" "default" {
 
   engine_version             = var.engine_version
   auto_minor_version_upgrade = var.auto_minor_version_upgrade
-  parameter_group_name       = join("", aws_memorydb_parameter_group.default.*.id)
-  subnet_group_name          = join("", aws_memorydb_subnet_group.default.*.id)
+  parameter_group_name       = join("", aws_memorydb_parameter_group.default[*].id)
+  subnet_group_name          = join("", aws_memorydb_subnet_group.default[*].id)
   security_group_ids         = var.security_group_ids
   port                       = var.port
 
@@ -50,7 +50,7 @@ resource "aws_memorydb_parameter_group" "default" {
 }
 
 locals {
-  user_password = var.admin_password != "" ? var.admin_password : join("", random_password.password.*.result)
+  user_password = var.admin_password != "" ? var.admin_password : join("", random_password.password[*].result)
 }
 
 resource "random_password" "password" {
@@ -89,5 +89,5 @@ resource "aws_memorydb_acl" "default" {
   count = module.this.enabled ? 1 : 0
 
   name       = module.this.id
-  user_names = aws_memorydb_user.admin.*.user_name
+  user_names = aws_memorydb_user.admin[*].user_name
 }
