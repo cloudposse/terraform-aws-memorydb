@@ -20,7 +20,7 @@ num_replicas_per_shard = 1
 
 tls_enabled = true
 
-engine_version = "6.x"
+engine_version = "6.2"
 
 auto_minor_version_upgrade = true
 
@@ -42,7 +42,7 @@ admin_username = "admin"
 
 ssm_parameter_name = "/memorydb/admin_password"
 
-parameter_group_family = "redis6.x"
+parameter_group_family = "memorydb_redis6"
 
 parameters = {
   "activedefrag" = "yes"
