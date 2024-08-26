@@ -1,12 +1,15 @@
 variable "region" {
+  description = "The AWS region to deploy to"
   type = string
 }
 
 variable "vpc_cidr_block" {
+  description = "The CIDR block for the VPC"
   type = string
 }
 
 variable "availability_zones" {
+  description = "The availability zones to deploy to"
   type = list(string)
 }
 
