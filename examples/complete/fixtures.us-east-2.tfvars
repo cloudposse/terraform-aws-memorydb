@@ -38,9 +38,11 @@ sns_topic_arn = null
 
 admin_password = ""
 
-admin_username = "admin"
+# causes a race condition between terraform and opentofu. So we randomize it
+# admin_username = "admin"
 
-ssm_parameter_name = "/memorydb/admin_password"
+# also conflicts during parallel runs of terraform and opentofu
+# ssm_parameter_name = "/memorydb/admin_password"
 
 parameter_group_family = "memorydb_redis6"
 
