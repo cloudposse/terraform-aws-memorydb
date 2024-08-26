@@ -53,6 +53,9 @@ references:
   - name: AWS MemoryDB resources
     url: https://aws.amazon.com/memorydb/resources
     description: AWS MemoryDB resources
+  - name: Vector search announcement for MemoryDB
+    url: https://aws.amazon.com/blogs/aws/vector-search-for-amazon-memorydb-is-now-generally-available/
+    description: AWS announces general availability for vector search with MemoryDB
   - name: Terraform Standard Module Structure
     description: HashiCorp's standard module structure is a file and directory layout we recommend for reusable modules distributed in separate repositories.
     url: https://www.terraform.io/docs/language/modules/develop/structure.html
@@ -69,7 +72,7 @@ description: |-
 
 # Introduction to the project
 introduction: |-
-  AWS MemoryDB is a fully managed, Redis-compatible, in-memory database service that delivers ultra-fast performance and Multi-AZ durability for modern applications built using microservices architectures.
+  AWS MemoryDB is a fully managed, Redis-compatible, in-memory database service that delivers ultra-fast performance and Multi-AZ durability for modern applications built using microservices architectures. MemoryDB also boasts the fastest vector search recall rates in the industry. With single-digit millisecond latency, MemoryDB can work with vector data at real-time speeds for AI models that demand performance.
 
 # How to use this module. Should be an easy example to copy and paste.
 usage: |-
