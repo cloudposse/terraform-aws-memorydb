@@ -72,7 +72,7 @@ variable "snapshot_window" {
   description = "The daily time range during which MemoryDB begins taking daily snapshots"
   type        = string
   default     = null
-  nullable    = false
+  nullable    = true
 }
 
 variable "snapshot_retention_limit" {
@@ -139,5 +139,5 @@ variable "sns_topic_arn" {
   description = "The ARN of the SNS topic to send notifications to"
   type        = string
   default     = null
-  nullable    = false
+  nullable    = true
 }
