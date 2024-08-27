@@ -15,7 +15,7 @@ resource "aws_memorydb_cluster" "default" {
   count = local.enabled ? 1 : 0
 
   name                   = module.this.id
-  acl_name               = one(aws_memorydb_acl.default[*].id)
+  acl_name               = var.tls_enabled ? one(aws_memorydb_acl.default[*].id) : "open-access"
   node_type              = var.node_type
   num_shards             = var.num_shards
   num_replicas_per_shard = var.num_replicas_per_shard
@@ -92,7 +92,7 @@ resource "aws_ssm_parameter" "admin_password" {
 }
 
 resource "aws_memorydb_acl" "default" {
-  count = local.enabled ? 1 : 0
+  count = local.enabled && var.tls_enabled ? 1 : 0
 
   name       = module.this.id
   user_names = aws_memorydb_user.admin[*].user_name
