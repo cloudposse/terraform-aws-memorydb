@@ -56,7 +56,7 @@ func TestExamplesComplete(t *testing.T) {
 
   // Run `terraform output` to get the value of an output variable
   id := terraform.Output(t, terraformOptions, "id")
-  assert.Contains(t, id, clusterId)
+  assert.Equal(t, id, clusterId)
 
   arn := terraform.Output(t, terraformOptions, "arn")
   assert.Contains(t, arn, clusterId)
@@ -71,7 +71,7 @@ func TestExamplesComplete(t *testing.T) {
   assert.Contains(t, admin_arn, adminId)
 
   admin_password_ssm_parameter_name := terraform.Output(t, terraformOptions, "admin_password_ssm_parameter_name")
-  assert.Contains(t, admin_password_ssm_parameter_name, ssmParameterName)
+  assert.Equal(t, admin_password_ssm_parameter_name, ssmParameterName)
   adminPassword, err := aws.GetParameterE(t, region, admin_password_ssm_parameter_name)
   if err != nil {
     assert.Fail(t, "Failed to retrieve admin password from SSM parameter: " + admin_password_ssm_parameter_name)
@@ -80,7 +80,7 @@ func TestExamplesComplete(t *testing.T) {
   }
   
   admin_username := terraform.Output(t, terraformOptions, "admin_username")
-  assert.Contains(t, admin_username, adminId)
+  assert.Equal(t, admin_username, adminId)
 
   engine_patch_version := terraform.Output(t, terraformOptions, "engine_patch_version")
   assert.Contains(t, engine_patch_version, "6.2.") // 6.2.x since patch versions are not guaranteed to be the same over time
@@ -89,7 +89,7 @@ func TestExamplesComplete(t *testing.T) {
   assert.Contains(t, parameter_group_arn, "parametergroup/" + clusterId)
 
   parameter_group_id := terraform.Output(t, terraformOptions, "parameter_group_id")
-  assert.Contains(t, parameter_group_id, clusterId)
+  assert.Equal(t, parameter_group_id, clusterId)
 
   subnet_group_arn := terraform.Output(t, terraformOptions, "subnet_group_arn")
   assert.Contains(t, subnet_group_arn, "subnetgroup/" + clusterId)
