@@ -17,7 +17,7 @@ module "subnets" {
   context = module.this.context
 }
 
-module "example" {
+module "memorydb" {
   source = "../.."
 
   node_type                  = var.node_type
