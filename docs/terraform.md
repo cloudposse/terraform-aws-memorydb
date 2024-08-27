@@ -5,13 +5,14 @@
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | > 1.0 |
 | <a name="requirement_aws"></a> [aws](#requirement\_aws) | >= 5.0 |
+| <a name="requirement_random"></a> [random](#requirement\_random) | >= 2.2 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
 | <a name="provider_aws"></a> [aws](#provider\_aws) | >= 5.0 |
-| <a name="provider_random"></a> [random](#provider\_random) | n/a |
+| <a name="provider_random"></a> [random](#provider\_random) | >= 2.2 |
 
 ## Modules
 
@@ -54,11 +55,11 @@
 | <a name="input_maintenance_window"></a> [maintenance\_window](#input\_maintenance\_window) | The weekly time range during which system maintenance can occur | `string` | `null` | no |
 | <a name="input_name"></a> [name](#input\_name) | ID element. Usually the component or solution name, e.g. 'app' or 'jenkins'.<br>This is the only ID element not also included as a `tag`.<br>The "name" tag is set to the full `id` string. There is no tag with the value of the `name` input. | `string` | `null` | no |
 | <a name="input_namespace"></a> [namespace](#input\_namespace) | ID element. Usually an abbreviation of your organization name, e.g. 'eg' or 'cp', to help ensure generated IDs are globally unique | `string` | `null` | no |
-| <a name="input_node_type"></a> [node\_type](#input\_node\_type) | The compute and memory capacity of the nodes in the cluster | `string` | `"db.r6g.large"` | no |
+| <a name="input_node_type"></a> [node\_type](#input\_node\_type) | Node type for the MemoryDB cluster | `string` | `"db.r6g.large"` | no |
 | <a name="input_num_replicas_per_shard"></a> [num\_replicas\_per\_shard](#input\_num\_replicas\_per\_shard) | The number of replicas per shard | `number` | `1` | no |
 | <a name="input_num_shards"></a> [num\_shards](#input\_num\_shards) | The number of shards in the cluster | `number` | `1` | no |
 | <a name="input_parameter_group_family"></a> [parameter\_group\_family](#input\_parameter\_group\_family) | The name of the parameter group family | `string` | `"redis6.x"` | no |
-| <a name="input_parameters"></a> [parameters](#input\_parameters) | List of parameters to apply to the parameter group | <pre>list(object({<br>    name  = string<br>    value = string<br>  }))</pre> | `[]` | no |
+| <a name="input_parameters"></a> [parameters](#input\_parameters) | Key-value mapping of parameters to apply to the parameter group | `map(string)` | `{}` | no |
 | <a name="input_port"></a> [port](#input\_port) | The port on which the cluster accepts connections | `number` | `6379` | no |
 | <a name="input_regex_replace_chars"></a> [regex\_replace\_chars](#input\_regex\_replace\_chars) | Terraform regular expression (regex) string.<br>Characters matching the regex will be removed from the ID elements.<br>If not set, `"/[^a-zA-Z0-9-]/"` is used to remove all characters other than hyphens, letters and digits. | `string` | `null` | no |
 | <a name="input_security_group_ids"></a> [security\_group\_ids](#input\_security\_group\_ids) | List of security group IDs to associate with the MemoryDB cluster | `list(string)` | `[]` | no |
@@ -88,7 +89,7 @@
 | <a name="output_id"></a> [id](#output\_id) | The name of the MemoryDB cluster |
 | <a name="output_parameter_group_arn"></a> [parameter\_group\_arn](#output\_parameter\_group\_arn) | The ARN of the MemoryDB parameter group |
 | <a name="output_parameter_group_id"></a> [parameter\_group\_id](#output\_parameter\_group\_id) | The name of the MemoryDB parameter group |
-| <a name="output_shards"></a> [shards](#output\_shards) | The number of shards in the MemoryDB cluster |
+| <a name="output_shards"></a> [shards](#output\_shards) | The shard details for the MemoryDB cluster |
 | <a name="output_subnet_group_arn"></a> [subnet\_group\_arn](#output\_subnet\_group\_arn) | The ARN of the MemoryDB subnet group |
 | <a name="output_subnet_group_id"></a> [subnet\_group\_id](#output\_subnet\_group\_id) | The name of the MemoryDB subnet group |
 <!-- markdownlint-restore -->

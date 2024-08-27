@@ -1,5 +1,5 @@
 variable "node_type" {
-  description = "The compute and memory capacity of the nodes in the cluster"
+  description = "Node type for the MemoryDB cluster"
   type        = string
   default     = "db.r6g.large"
   nullable    = false
