@@ -29,7 +29,7 @@ variable "tls_enabled" {
 variable "engine_version" {
   description = "The version of the Redis engine to use"
   type        = string
-  default     = "6.x"
+  default     = "6.2"
   nullable    = false
 }
 
@@ -121,7 +121,7 @@ variable "ssm_parameter_name" {
 variable "parameter_group_family" {
   description = "The name of the parameter group family"
   type        = string
-  default     = "redis6.x"
+  default     = "memorydb_redis6"
   nullable    = false
 }
 
