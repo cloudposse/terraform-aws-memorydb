@@ -56,7 +56,7 @@ resource "aws_memorydb_parameter_group" "default" {
 }
 
 locals {
-  user_password = var.admin_password != "" ? var.admin_password : join("", random_password.password[*].result)
+  user_password = var.admin_password != "" ? var.admin_password : one(random_password.password[*].result)
 }
 
 resource "random_password" "password" {
