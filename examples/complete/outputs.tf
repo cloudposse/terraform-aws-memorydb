@@ -1,60 +1,60 @@
 output "id" {
-  description = "ID of the created example"
+  description = "ID of the created MemoryDB cluster"
   value       = module.example.id
 }
 
 output "arn" {
-  description = "ARN of the created example"
+  description = "ARN of the created MemoryDB cluster"
   value       = module.example.arn
 }
 
 output "cluster_endpoint" {
-  description = "Cluster endpoint of the created example"
+  description = "Endpoint of the created MemoryDB cluster"
   value       = module.example.cluster_endpoint
 }
 
 output "engine_patch_version" {
-  description = "Engine patch version of the created example"
+  description = "Engine patch version of the MemoryDB cluster"
   value       = module.example.engine_patch_version
 }
 
 output "parameter_group_id" {
-  description = "ID of the parameter group of the created example"
+  description = "ID of the MemoryDB cluster's parameter group"
   value       = module.example.parameter_group_id
 }
 
 output "parameter_group_arn" {
-  description = "ARN of the parameter group of the created example"
+  description = "ARN of the MemoryDB cluster's parameter group"
   value       = module.example.parameter_group_arn
 }
 
 output "subnet_group_id" {
-  description = "ID of the subnet group of the created example"
+  description = "ID of the MemoryDB cluster's subnet group"
   value       = module.example.subnet_group_id
 }
 
 output "subnet_group_arn" {
-  description = "ARN of the subnet group of the created example"
+  description = "ARN of the MemoryDB cluster's subnet group"
   value       = module.example.subnet_group_arn
 }
 
 output "shards" {
-  description = "Number of shards in the created example"
+  description = "Shard details of the MemoryDB cluster"
   value       = module.example.shards
 }
 
 output "admin_username" {
-  description = "Username of the MemoryDB user"
+  description = "Username of the MemoryDB admin"
   value       = module.example.admin_username
 }
 
 output "admin_arn" {
-  description = "ARN of the MemoryDB user"
+  description = "ARN of the MemoryDB admin"
   value       = module.example.admin_arn
 }
 
 output "admin_acl_arn" {
-  description = "ARN of the MemoryDB user's ACL"
+  description = "ARN of the MemoryDB admin's ACL"
   value       = module.example.admin_acl_arn
 }
 
