@@ -68,7 +68,7 @@ references:
 
 # Short description of this project
 description: |-
-  This module allows an engineer to configure the admin user, subnet group, and parameter group for an AWS MemoryDB cluster.
+  This module allows an engineer to provision MemoryDB clusters along with an admin user, subnet group, and parameter group. MemoryDB is a real-time in-memory database with API compatibility for Redis.
 
 # Introduction to the project
 introduction: |-
