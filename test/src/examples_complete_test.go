@@ -5,6 +5,7 @@ import (
 	"strings"
 	"testing"
 
+  "github.com/gruntwork-io/terratest/modules/aws"
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	testStructure "github.com/gruntwork-io/terratest/modules/test-structure"
@@ -25,10 +26,11 @@ func TestExamplesComplete(t *testing.T) {
   adminId := "admin-" + randID
   clusterId := "eg-ue2-test-memorydb-" + randID
   ssmParameterName := "/memorydb/" + clusterId
+  region := "us-east-2"
 
   rootFolder := "../../"
   terraformFolderRelativeToRoot := "examples/complete"
-  varFiles := []string{"fixtures.us-east-2.tfvars"}
+  varFiles := []string{"fixtures." + region + ".tfvars"}
 
   tempTestFolder := testStructure.CopyTerraformFolderToTemp(t, rootFolder, terraformFolderRelativeToRoot)
 
@@ -70,6 +72,12 @@ func TestExamplesComplete(t *testing.T) {
 
   admin_password_ssm_parameter_name := terraform.Output(t, terraformOptions, "admin_password_ssm_parameter_name")
   assert.Contains(t, admin_password_ssm_parameter_name, ssmParameterName)
+  adminPassword, err := aws.GetParameterE(t, region, admin_password_ssm_parameter_name)
+  if err != nil {
+    assert.Fail(t, "Failed to retrieve admin password from SSM parameter: " + admin_password_ssm_parameter_name)
+  } else {
+    assert.NotEmpty(t, adminPassword)
+  }
   
   admin_username := terraform.Output(t, terraformOptions, "admin_username")
   assert.Contains(t, admin_username, adminId)
