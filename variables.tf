@@ -65,21 +65,18 @@ variable "maintenance_window" {
   description = "The weekly time range during which system maintenance can occur"
   type        = string
   default     = null
-  nullable    = true
 }
 
 variable "snapshot_window" {
   description = "The daily time range during which MemoryDB begins taking daily snapshots"
   type        = string
   default     = null
-  nullable    = true
 }
 
 variable "snapshot_retention_limit" {
   description = "The number of days for which MemoryDB retains automatic snapshots before deleting them"
   type        = number
   default     = null
-  nullable    = true
 }
 
 variable "snapshot_arns" {
@@ -108,7 +105,6 @@ variable "ssm_kms_key_id" {
   description = "The KMS key ID to use for SSM parameter encryption. If not specified, the default key will be used."
   type        = string
   default     = null
-  nullable    = true
 }
 
 variable "ssm_parameter_name" {
@@ -136,5 +132,4 @@ variable "sns_topic_arn" {
   description = "The ARN of the SNS topic to send notifications to"
   type        = string
   default     = null
-  nullable    = true
 }
