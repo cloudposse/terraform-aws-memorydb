@@ -1,14 +1,15 @@
 package test
 
 import (
-  "os"
-  "strings"
-  "testing"
+	"os"
+	"strings"
+	"testing"
 
-  "github.com/gruntwork-io/terratest/modules/random"
-  "github.com/gruntwork-io/terratest/modules/terraform"
-  testStructure "github.com/gruntwork-io/terratest/modules/test-structure"
-  "github.com/stretchr/testify/assert"
+  "github.com/gruntwork-io/terratest/modules/aws"
+	"github.com/gruntwork-io/terratest/modules/random"
+	"github.com/gruntwork-io/terratest/modules/terraform"
+	testStructure "github.com/gruntwork-io/terratest/modules/test-structure"
+	"github.com/stretchr/testify/assert"
 )
 
 func cleanup(t *testing.T, terraformOptions *terraform.Options, tempTestFolder string) {
@@ -22,9 +23,14 @@ func TestExamplesComplete(t *testing.T) {
   randID := strings.ToLower(random.UniqueId())
   attributes := []string{randID}
 
+  adminID := "admin-" + randID
+  clusterID := "eg-ue2-test-memorydb-" + randID
+  ssmParameterName := "/memorydb/" + clusterID
+  region := "us-east-2"
+
   rootFolder := "../../"
   terraformFolderRelativeToRoot := "examples/complete"
-  varFiles := []string{"fixtures.us-east-2.tfvars"}
+  varFiles := []string{"fixtures." + region + ".tfvars"}
 
   tempTestFolder := testStructure.CopyTerraformFolderToTemp(t, rootFolder, terraformFolderRelativeToRoot)
 
@@ -36,6 +42,9 @@ func TestExamplesComplete(t *testing.T) {
     VarFiles: varFiles,
     Vars: map[string]interface{}{
       "attributes": attributes,
+      // avoid opentofu and terraform colliding on the same username during parallel tests
+      "admin_username": adminID,
+      "ssm_parameter_name": ssmParameterName,
     },
   }
 
@@ -45,48 +54,53 @@ func TestExamplesComplete(t *testing.T) {
   // This will run `terraform init` and `terraform apply` and fail the test if there are any errors
   terraform.InitAndApply(t, terraformOptions)
 
-  expectedExampleInput := "Hello, world!"
-
   // Run `terraform output` to get the value of an output variable
   id := terraform.Output(t, terraformOptions, "id")
-  example := terraform.Output(t, terraformOptions, "example")
-  random := terraform.Output(t, terraformOptions, "random")
+  assert.Equal(t, id, clusterID)
 
-  // Verify we're getting back the outputs we expect
-  // Ensure we get a random number appended
-  assert.Equal(t, expectedExampleInput+" "+random, example)
-  // Ensure we get the attribute included in the ID
-  assert.Equal(t, "eg-ue2-test-example-"+randID, id)
+  arn := terraform.Output(t, terraformOptions, "arn")
+  assert.Contains(t, arn, clusterID)
 
-  // ************************************************************************
-  // This steps below are unusual, not generally part of the testing
-  // but included here as an example of testing this specific module.
-  // This module has a random number that is supposed to change
-  // only when the example changes. So we run it again to ensure
-  // it does not change.
+  cluster_endpoint := terraform.Output(t, terraformOptions, "cluster_endpoint")
+  assert.Contains(t, cluster_endpoint, clusterID)
 
-  // This will run `terraform apply` a second time and fail the test if there are any errors
-  terraform.Apply(t, terraformOptions)
+  admin_acl_arn := terraform.Output(t, terraformOptions, "admin_acl_arn")
+  assert.Contains(t, admin_acl_arn, "acl/" + clusterID)
+  
+  admin_arn := terraform.Output(t, terraformOptions, "admin_arn")
+  assert.Contains(t, admin_arn, adminID)
 
-  id2 := terraform.Output(t, terraformOptions, "id")
-  example2 := terraform.Output(t, terraformOptions, "example")
-  random2 := terraform.Output(t, terraformOptions, "random")
+  admin_password_ssm_parameter_name := terraform.Output(t, terraformOptions, "admin_password_ssm_parameter_name")
+  assert.Equal(t, admin_password_ssm_parameter_name, ssmParameterName)
+  adminPassword, err := aws.GetParameterE(t, region, admin_password_ssm_parameter_name)
+  if err != nil {
+    assert.Fail(t, "Failed to retrieve admin password from SSM parameter: " + admin_password_ssm_parameter_name)
+  } else {
+    assert.NotEmpty(t, adminPassword)
+  }
+  
+  admin_username := terraform.Output(t, terraformOptions, "admin_username")
+  assert.Equal(t, admin_username, adminID)
 
-  assert.Equal(t, id, id2, "Expected `id` to be stable")
-  assert.Equal(t, example, example2, "Expected `example` to be stable")
-  assert.Equal(t, random, random2, "Expected `random` to be stable")
+  engine_patch_version := terraform.Output(t, terraformOptions, "engine_patch_version")
+  assert.Contains(t, engine_patch_version, "6.2.") // 6.2.x since patch versions are not guaranteed to be the same over time
 
-  // Then we run change the example and run it a third time and
-  // verify that the random number changed
-  newExample := "Goodbye"
-  terraformOptions.Vars["example_input_override"] = newExample
-  terraform.Apply(t, terraformOptions)
+  parameter_group_arn := terraform.Output(t, terraformOptions, "parameter_group_arn")
+  assert.Contains(t, parameter_group_arn, "parametergroup/" + clusterID)
 
-  example3 := terraform.Output(t, terraformOptions, "example")
-  random3 := terraform.Output(t, terraformOptions, "random")
+  parameter_group_id := terraform.Output(t, terraformOptions, "parameter_group_id")
+  assert.Equal(t, parameter_group_id, clusterID)
 
-  assert.NotEqual(t, random, random3, "Expected `random` to change when `example` changed")
-  assert.Equal(t, newExample+" "+random3, example3, "Expected `example` to use new random number")
+  subnet_group_arn := terraform.Output(t, terraformOptions, "subnet_group_arn")
+  assert.Contains(t, subnet_group_arn, "subnetgroup/" + clusterID)
+
+  subnet_group_id := terraform.Output(t, terraformOptions, "subnet_group_id")
+  assert.Contains(t, subnet_group_id, clusterID)
+
+  shards := terraform.Output(t, terraformOptions, "shards")
+  assert.Contains(t, shards, clusterID + "-0001-001")
+  // also make sure at least one of the availability zones is present
+  assert.Contains(t, shards, "us-east-2a")
 
 }
 
