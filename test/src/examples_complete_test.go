@@ -23,9 +23,9 @@ func TestExamplesComplete(t *testing.T) {
   randID := strings.ToLower(random.UniqueId())
   attributes := []string{randID}
 
-  adminId := "admin-" + randID
-  clusterId := "eg-ue2-test-memorydb-" + randID
-  ssmParameterName := "/memorydb/" + clusterId
+  adminID := "admin-" + randID
+  clusterID := "eg-ue2-test-memorydb-" + randID
+  ssmParameterName := "/memorydb/" + clusterID
   region := "us-east-2"
 
   rootFolder := "../../"
@@ -43,7 +43,7 @@ func TestExamplesComplete(t *testing.T) {
     Vars: map[string]interface{}{
       "attributes": attributes,
       // avoid opentofu and terraform colliding on the same username during parallel tests
-      "admin_username": adminId,
+      "admin_username": adminID,
       "ssm_parameter_name": ssmParameterName,
     },
   }
@@ -56,19 +56,19 @@ func TestExamplesComplete(t *testing.T) {
 
   // Run `terraform output` to get the value of an output variable
   id := terraform.Output(t, terraformOptions, "id")
-  assert.Equal(t, id, clusterId)
+  assert.Equal(t, id, clusterID)
 
   arn := terraform.Output(t, terraformOptions, "arn")
-  assert.Contains(t, arn, clusterId)
+  assert.Contains(t, arn, clusterID)
 
   cluster_endpoint := terraform.Output(t, terraformOptions, "cluster_endpoint")
-  assert.Contains(t, cluster_endpoint, clusterId)
+  assert.Contains(t, cluster_endpoint, clusterID)
 
   admin_acl_arn := terraform.Output(t, terraformOptions, "admin_acl_arn")
-  assert.Contains(t, admin_acl_arn, "acl/" + clusterId)
+  assert.Contains(t, admin_acl_arn, "acl/" + clusterID)
   
   admin_arn := terraform.Output(t, terraformOptions, "admin_arn")
-  assert.Contains(t, admin_arn, adminId)
+  assert.Contains(t, admin_arn, adminID)
 
   admin_password_ssm_parameter_name := terraform.Output(t, terraformOptions, "admin_password_ssm_parameter_name")
   assert.Equal(t, admin_password_ssm_parameter_name, ssmParameterName)
@@ -80,25 +80,25 @@ func TestExamplesComplete(t *testing.T) {
   }
   
   admin_username := terraform.Output(t, terraformOptions, "admin_username")
-  assert.Equal(t, admin_username, adminId)
+  assert.Equal(t, admin_username, adminID)
 
   engine_patch_version := terraform.Output(t, terraformOptions, "engine_patch_version")
   assert.Contains(t, engine_patch_version, "6.2.") // 6.2.x since patch versions are not guaranteed to be the same over time
 
   parameter_group_arn := terraform.Output(t, terraformOptions, "parameter_group_arn")
-  assert.Contains(t, parameter_group_arn, "parametergroup/" + clusterId)
+  assert.Contains(t, parameter_group_arn, "parametergroup/" + clusterID)
 
   parameter_group_id := terraform.Output(t, terraformOptions, "parameter_group_id")
-  assert.Equal(t, parameter_group_id, clusterId)
+  assert.Equal(t, parameter_group_id, clusterID)
 
   subnet_group_arn := terraform.Output(t, terraformOptions, "subnet_group_arn")
-  assert.Contains(t, subnet_group_arn, "subnetgroup/" + clusterId)
+  assert.Contains(t, subnet_group_arn, "subnetgroup/" + clusterID)
 
   subnet_group_id := terraform.Output(t, terraformOptions, "subnet_group_id")
-  assert.Contains(t, subnet_group_id, clusterId)
+  assert.Contains(t, subnet_group_id, clusterID)
 
   shards := terraform.Output(t, terraformOptions, "shards")
-  assert.Contains(t, shards, clusterId + "-0001-001")
+  assert.Contains(t, shards, clusterID + "-0001-001")
   // also make sure at least one of the availability zones is present
   assert.Contains(t, shards, "us-east-2a")
 
