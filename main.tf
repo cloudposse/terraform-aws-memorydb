@@ -11,6 +11,10 @@ resource "aws_memorydb_subnet_group" "default" {
   tags = module.this.tags
 }
 
+locals {
+  parameter_group_name = var.parameter_group_name != null ? var.parameter_group_name : one(aws_memorydb_parameter_group.default[*].id)
+}
+
 resource "aws_memorydb_cluster" "default" {
   count = local.enabled ? 1 : 0
 
@@ -23,7 +27,7 @@ resource "aws_memorydb_cluster" "default" {
 
   engine_version             = var.engine_version
   auto_minor_version_upgrade = var.auto_minor_version_upgrade
-  parameter_group_name       = one(aws_memorydb_parameter_group.default[*].id)
+  parameter_group_name       = local.parameter_group_name
   subnet_group_name          = one(aws_memorydb_subnet_group.default[*].id)
   security_group_ids         = var.security_group_ids
   port                       = var.port
@@ -95,5 +99,5 @@ resource "aws_memorydb_acl" "default" {
   count = local.enabled && var.tls_enabled ? 1 : 0
 
   name       = module.this.id
-  user_names = aws_memorydb_user.admin[*].user_name
+  user_names = concat(aws_memorydb_user.admin[*].user_name, var.additional_users)
 }

@@ -101,6 +101,13 @@ variable "admin_password" {
   nullable    = false
 }
 
+variable "additional_users" {
+  description = "List of additional users to create for the MemoryDB cluster"
+  type        = list(string)
+  default     = []
+  nullable    = false
+}
+
 variable "ssm_kms_key_id" {
   description = "The KMS key ID to use for SSM parameter encryption. If not specified, the default key will be used."
   type        = string
@@ -112,6 +119,13 @@ variable "ssm_parameter_name" {
   type        = string
   default     = ""
   nullable    = false
+}
+
+variable "parameter_group_name" {
+  description = "The name of the parameter group to associate with this cluster."
+  type        = string
+  default     = null
+  nullable    = true
 }
 
 variable "parameter_group_family" {
