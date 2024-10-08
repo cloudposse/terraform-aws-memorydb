@@ -101,6 +101,13 @@ variable "admin_password" {
   nullable    = false
 }
 
+variable "create_admin_user" {
+  description = "Indicates whether to create an admin user for the MemoryDB cluster"
+  type        = bool
+  default     = true
+  nullable    = false
+}
+
 variable "additional_users" {
   description = "List of additional users to create for the MemoryDB cluster"
   type        = list(string)

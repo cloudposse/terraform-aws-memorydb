@@ -72,7 +72,7 @@ resource "random_password" "password" {
 }
 
 resource "aws_memorydb_user" "admin" {
-  count = local.enabled ? 1 : 0
+  count = local.enabled && var.create_admin_user ? 1 : 0
 
   user_name     = var.admin_username
   access_string = "on ~* &* +@all"
